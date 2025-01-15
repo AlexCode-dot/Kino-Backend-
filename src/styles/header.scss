@@ -28,10 +28,19 @@
       background-color: #52b3d9;
       color: black;
     }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
   }
 }
 
 .header {
   padding: 0px 20px 0px 20px;
   background-color: #012840;
+}
+
+li.menu-active {
+  background-color: #52b3d9;
+  color: black;
 }
