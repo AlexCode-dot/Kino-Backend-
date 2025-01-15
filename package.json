@@ -1,0 +1,38 @@
+{
+  "name": "kino-scrum",
+  "version": "1.0.0",
+  "description": "Website for a local movie theater",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "prepare": "husky install",
+    "build-css": "sass src/styles/main.scss static/styles.css",
+    "watch-css": "sass --watch src/styles/main.scss:static/styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2",
+    "sass": "^1.83.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md,html}": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "node-fetch": "^3.3.2"
+  }
+}
