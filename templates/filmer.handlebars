@@ -22,17 +22,20 @@
     <option value="Comedy" class="filter-genre__dropdown-comedy"></option>
   </select>
 </div>
-<div class="movie__wrapper">
-  <ul>
+  <ul class="movie__wrapper">
     {{#each movies }}
-    <li>
+    <li class="movie">
       <a href="/movies/{{ this.id }}">
-        {{ this.attributes.title }}
+        {{#if this.attributes.image }}
+        <img class="movie__image " src="{{ this.attributes.image.url }}">
+        {{/if }}
+        <div class="movie__content">
+          <h2 class="movie__title">{{ this.attributes.title }}</h2>
+        </div>
       </a>
     </li>
     {{/each}}
   </ul>
-</div>
 <div class="filter-btn__container">
   <button class="filter-btn__show-less" type="button"></button>
   <button class="filter-btn__show-all" type="button"></button>

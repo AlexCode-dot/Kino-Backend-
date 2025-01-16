@@ -533,6 +533,9 @@ li.menu-active {
   display: flex;
   flex-direction: column;
 }
+.movie a {
+  text-decoration: none;
+}
 
 .movie__image {
   width: 100%;
