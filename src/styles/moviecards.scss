@@ -83,3 +83,12 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.movie__container {
+  display: block;
+  width: 50%;
+  margin: 40px auto 40px;
+  text-align: center;
+  background-color: #012840;
+  color: white;
+}
