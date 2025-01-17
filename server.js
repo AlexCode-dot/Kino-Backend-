@@ -1,12 +1,12 @@
 import express from 'express'
-import { engine } from 'express-handlebars'
+import ejsMate from 'ejs-mate';
 import renderPage from './lib/renderPage.js'
 import { loadMovie, loadMovies, filmExists } from "./lib/fetchMovies.js";
 
 
 const app = express()
-app.engine('handlebars', engine())
-app.set('view engine', 'handlebars')
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs')
 app.set('views', './templates')
 
 app.get('/', async (request, response) => {
@@ -20,7 +20,7 @@ app.get('/', async (request, response) => {
  
 app.get("/movies/:movieId", async (request, response) => {
   if (!(await filmExists(request.params.movieId))) {
-    return response.status(404).render("404", {
+    return renderPage(response, "404", {
       message: "Filmen kunde inte hittas",
     });
   }
@@ -64,7 +64,7 @@ app.get('/loggain', async (request, response) => {
 app.use('/static', express.static('./static'))
 
 app.use((request, response) => {
-  response.status(404).render('404', { message: 'Sidan finns inte' });
+  renderPage(response, '404', { message: 'Sidan finns inte' });
 });
 
 app.listen(5080)

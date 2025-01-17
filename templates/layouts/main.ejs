@@ -17,16 +17,18 @@
     </div>
     <nav class="header__nav">
       <ul class="header__nav-list">
-        {{#each menuItems}}
-        <li class="header__nav-item {{#if this.active}}menu-active{{else}}menu-inactive{{/if}}">
-          <a href="{{this.link}}">{{this.label}}</a>
-        </li>
-        {{/each}}
+        <% menuItems.forEach(item=> { %>
+          <li class="header__nav-item <%= item.active ? 'menu-active' : 'menu-inactive' %>">
+            <a href="<%= item.link %>">
+              <%= item.label %>
+            </a>
+          </li>
+          <% }) %>
       </ul>
     </nav>
   </header>
   <main class="main">
-    {{{body}}}
+    <%- body %>
   </main>
   <footer class="footer">
     <div class="footer__social">

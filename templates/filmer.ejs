@@ -1,3 +1,4 @@
+<% layout('layouts/main') %>
 <div class="search__container">
   <label class="search__label" for="search"></label>
   <input class="search__input" type="text" maxlength="60" name="search" placeholder="" />
@@ -22,20 +23,22 @@
     <option value="Comedy" class="filter-genre__dropdown-comedy"></option>
   </select>
 </div>
-  <ul class="movie__wrapper">
-    {{#each movies }}
+<ul class="movie__wrapper">
+  <% movies.forEach(movie=> { %>
     <li class="movie">
-      <a href="/movies/{{ this.id }}">
-        {{#if this.attributes.image }}
-        <img class="movie__image " src="{{ this.attributes.image.url }}">
-        {{/if }}
-        <div class="movie__content">
-          <h2 class="movie__title">{{ this.attributes.title }}</h2>
-        </div>
+      <a href="/movies/<%= movie.id %>">
+        <% if (movie.attributes.image) { %>
+          <img class="movie__image" src="<%= movie.attributes.image.url %>" />
+          <% } %>
+            <div class="movie__content">
+              <h2 class="movie__title">
+                <%= movie.attributes.title %>
+              </h2>
+            </div>
       </a>
     </li>
-    {{/each}}
-  </ul>
+    <% }); %>
+</ul>
 <div class="filter-btn__container">
   <button class="filter-btn__show-less" type="button"></button>
   <button class="filter-btn__show-all" type="button"></button>
