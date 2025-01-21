@@ -18,9 +18,9 @@ async function getMenu() {
 export default async function renderPage(response, page, additionalData = {}) {
   const menu = await getMenu()
 
-  if (additionalData.movie) {
-    additionalData.movie.attributes.intro = marked(additionalData.movie.attributes.intro);
-  }
+  if (additionalData.movie && additionalData.movie.intro) {
+    additionalData.movie.intro = marked(additionalData.movie.intro);
+  }  
 
   response.render(page, {
     menuItems: menu.map((item) => {

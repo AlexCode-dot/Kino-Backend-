@@ -21,14 +21,22 @@ export default function initApp(api) {
     })
 
     app.get("/movies/:movieId", async (request, response) => {
-        if (!(await filmExists(request.params.movieId))) {
+        try {
+        const movieId = request.params.movieId;
+        if (!(await filmExists(movieId))) {
+            response.status(404);
             return renderPage(response, "404", {
                 message: "Filmen kunde inte hittas",
             });
         }
-
-        const movie = await api.loadMovie(request.params.movieId);
-        await renderPage(response, 'film', { movie })
+    
+        const movie = await api.loadMovie(movieId);
+        await renderPage(response, 'film', { movie });
+        
+    } catch (err) {
+        console.error(`Error loading movie with ID ${request.params.movieId}:`, err);
+        response.status(500).send('Error loading the movie');
+    }
     });
 
     app.get('/barnbio', async (request, response) => {
@@ -51,7 +59,7 @@ export default function initApp(api) {
         try {
             renderPage(response, 'omoss')
         } catch (err) {
-            response.status(500).send('Error loading omoss')
+            response.status(500).send('Error loading om oss')
         }
     })
 
@@ -59,13 +67,14 @@ export default function initApp(api) {
         try {
             renderPage(response, 'loggain')
         } catch (err) {
-            response.status(500).send('Error loading loggain')
+            response.status(500).send('Error loading logga in')
         }
     })
 
     app.use('/static', express.static('./static'))
 
     app.use((request, response) => {
+        response.status(404);
         renderPage(response, '404', { message: 'Sidan finns inte' });
     });
 
