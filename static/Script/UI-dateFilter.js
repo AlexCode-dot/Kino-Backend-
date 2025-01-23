@@ -38,7 +38,8 @@ function generateDateList() {
 }
 
 async function updateDateFilter() {
-  const frontPageContent = await loadFrontPageContent()
+  const contentResponse = await fetch('/static/json/FrontPage-content.json')
+  const frontPageContent = await contentResponse.json()
 
   const dateFilterList = document.querySelector('.date-filter__list')
   const dateList = generateDateList()
@@ -136,7 +137,8 @@ document.querySelector('.filter-btn--other').addEventListener('click', async () 
   if (!existingCloseBtn) {
     const dateTitle = document.createElement('h3')
     dateTitle.classList.add('date__title')
-    const frontPageContent = await loadFrontPageContent()
+    const contentResponse = await fetch('/static/json/FrontPage-content.json')
+    const frontPageContent = await contentResponse.json()
     dateTitle.innerHTML = frontPageContent.dateFilter.dateTitle
     dateBtn.insertBefore(dateTitle, dateBtn.children[0])
 

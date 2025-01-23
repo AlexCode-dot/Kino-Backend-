@@ -1,26 +1,14 @@
-import fs from 'fs/promises'
-import { marked } from 'marked';
-
-async function getMenu() {
-  const json = await fs.readFile('./static/json/FrontPage-content.json', 'utf-8')
-  const frontPageContent = JSON.parse(json)
-  const menuData = frontPageContent.header.menu
-
-  const menu = menuData.map((item) => ({
-    label: item,
-    link: item.toLowerCase() === 'filmer' ? '/' : `/${item.toLowerCase().replace(/\s+/g, '')}`,
-    id: item.toLowerCase().replace(/\s+/g, ''),
-  }))
-
-  return menu
-}
+//import fs from 'fs/promises'
+import { marked } from 'marked'
+import { getMenu, getFrontPageContent } from './jsonContent.js'
 
 export default async function renderPage(response, page, additionalData = {}) {
   const menu = await getMenu()
+  const { frontPageContent, frontPageImages } = await getFrontPageContent()
 
   if (additionalData.movie && additionalData.movie.intro) {
-    additionalData.movie.intro = marked(additionalData.movie.intro);
-  }  
+    additionalData.movie.intro = marked(additionalData.movie.intro)
+  }
 
   response.render(page, {
     menuItems: menu.map((item) => {
@@ -30,6 +18,8 @@ export default async function renderPage(response, page, additionalData = {}) {
         active: item.id == page,
       }
     }),
-    ...additionalData
+    frontPageContent,
+    frontPageImages,
+    ...additionalData,
   })
 }
