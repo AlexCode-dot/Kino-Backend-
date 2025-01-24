@@ -1,4 +1,3 @@
-//import fs from 'fs/promises'
 import { marked } from 'marked'
 import { getMenu, getFrontPageContent } from '../services/loadJson.js'
 
