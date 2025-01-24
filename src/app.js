@@ -1,8 +1,8 @@
 import express from 'express'
 import ejsMate from 'ejs-mate'
-import renderPage from './renderPage.js'
-import { filmExists } from './fetchMovies.js'
-import { renderErrorPage } from './errorHandler.js'
+import renderPage from './lib/renderPage.js'
+import { filmExists } from './services/fetchMovies.js'
+import { renderErrorPage } from './lib/errorHandler.js'
 
 export default function initApp(api) {
   const app = express()

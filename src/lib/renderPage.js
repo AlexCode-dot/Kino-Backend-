@@ -1,6 +1,6 @@
 //import fs from 'fs/promises'
 import { marked } from 'marked'
-import { getMenu, getFrontPageContent } from './loadJson.js'
+import { getMenu, getFrontPageContent } from '../services/loadJson.js'
 
 export default async function renderPage(response, page, additionalData = {}) {
   const menu = await getMenu()
