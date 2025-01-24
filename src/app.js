@@ -2,6 +2,7 @@ import express from 'express'
 import ejsMate from 'ejs-mate'
 import renderPage from './renderPage.js'
 import { filmExists } from './fetchMovies.js'
+import { renderErrorPage } from './errorHandler.js'
 
 export default function initApp(api) {
   const app = express()
@@ -10,70 +11,79 @@ export default function initApp(api) {
   app.set('view engine', 'ejs')
   app.set('views', './templates')
 
-  app.get('/', async (request, response) => {
+  app.get('/', async (request, response, next) => {
     try {
       const movies = await api.loadMovies()
       await renderPage(response, 'filmer', { movies })
     } catch (err) {
-      response.status(500).send('Error loading filmer')
+      next(err)
     }
   })
 
-  app.get('/movies/:movieId', async (request, response) => {
+  app.get('/movies/:movieId', async (request, response, next) => {
     try {
       const movieId = request.params.movieId
       if (!(await filmExists(movieId))) {
         response.status(404)
-        return renderPage(response, '404', {
-          message: 'Filmen kunde inte hittas',
-        })
+        return renderErrorPage(response, 404, 'Sidan kunde inte hittas', 'Filmen kunde inte hittas')
       }
 
       const movie = await api.loadMovie(movieId)
       await renderPage(response, 'film', { movie })
     } catch (err) {
-      console.error(`Error loading movie with ID ${request.params.movieId}:`, err)
-      response.status(500).send('Error loading the movie')
+      next(err)
     }
   })
 
-  app.get('/barnbio', async (request, response) => {
+  app.get('/barnbio', async (request, response, next) => {
     try {
       renderPage(response, 'barnbio')
     } catch (err) {
-      response.status(500).send('Error loading barnbio')
+      next(err)
     }
   })
 
-  app.get('/evenemang', async (request, response) => {
+  app.get('/evenemang', async (request, response, next) => {
     try {
       renderPage(response, 'evenemang')
     } catch (err) {
-      response.status(500).send('Error loading evenemang')
+      next(err)
     }
   })
 
-  app.get('/omoss', async (request, response) => {
+  app.get('/omoss', async (request, response, next) => {
     try {
       renderPage(response, 'omoss')
     } catch (err) {
-      response.status(500).send('Error loading om oss')
+      next(err)
     }
   })
 
-  app.get('/loggain', async (request, response) => {
+  app.get('/loggain', async (request, response, next) => {
     try {
       renderPage(response, 'loggain')
     } catch (err) {
-      response.status(500).send('Error loading logga in')
+      next(err)
     }
   })
 
   app.use('/static', express.static('./static'))
 
+  // Testfel route för 500
+  app.get('/test-error', (request, response, next) => {
+    const error = new Error('Detta är ett avsiktligt testfel.')
+    error.status = 500
+    next(error)
+  })
+
   app.use((request, response) => {
-    response.status(404)
-    renderPage(response, '404', { message: 'Sidan finns inte' })
+    renderErrorPage(response, 404, 'Sidan kunde inte hittas', 'Sidan finns inte')
+  })
+
+  app.use((err, request, response, next) => {
+    console.error('Ett serverfel inträffade:', err)
+    const status = err.status || 500
+    renderErrorPage(response, status, 'Tekniskt fel', 'Ett oväntat fel inträffade. Försök igen senare.')
   })
 
   return app
